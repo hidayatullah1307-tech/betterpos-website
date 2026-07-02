@@ -101,7 +101,7 @@ export default function Hero() {
             </motion.h1>
 
             <motion.p variants={stagger.item} className="body-lg" style={{ color: 'var(--text-muted)', marginTop: 24, maxWidth: 480 }}>
-              Tidak perlu internet. Tidak ada biaya bulanan. Sekelas aplikasi kasir online — harga yang jauh lebih masuk akal.
+              Tidak perlu internet. Tidak ada biaya bulanan. Sekelas aplikasi kasir online — harga yang jauh lebih bersahabat.
             </motion.p>
 
             <motion.div variants={stagger.item} style={{ display: 'flex', gap: 16, marginTop: 40, flexWrap: 'wrap' }}>
