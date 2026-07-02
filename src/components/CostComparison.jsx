@@ -24,8 +24,9 @@ export default function CostComparison() {
           </p>
         </AnimatedSection>
 
-        <AnimatedSection delay={0.15} style={{ marginTop: 56 }}>
-          <div style={{ overflowX: 'auto', width: '100%', WebkitOverflowScrolling: 'touch' }}>
+        {/* Desktop: table */}
+        <AnimatedSection delay={0.15} style={{ marginTop: 56 }} className="cost-desktop">
+          <div style={{ overflowX: 'auto', width: '100%' }}>
           <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, minWidth: 560 }}>
             <thead>
               <tr>
@@ -42,7 +43,7 @@ export default function CostComparison() {
                   outline: row.highlight ? '2px solid rgba(83,74,183,0.2)' : 'none',
                   outlineOffset: row.highlight ? '-1px' : 0,
                 }}>
-                  <td style={{ padding: '18px 20px', fontWeight: row.highlight ? 800 : 600, color: row.highlight ? 'var(--purple)' : 'var(--text-dark)', borderBottom: '1px solid var(--border-light)', borderRadius: i === rows.length - 1 ? '0 0 0 12px' : 0 }}>
+                  <td style={{ padding: '18px 20px', fontWeight: row.highlight ? 800 : 600, color: row.highlight ? 'var(--purple)' : 'var(--text-dark)', borderBottom: '1px solid var(--border-light)' }}>
                     {row.name}
                     {row.highlight && <span style={{ marginLeft: 10, fontSize: '0.72rem', background: 'var(--purple)', color: '#fff', padding: '2px 8px', borderRadius: 999, fontWeight: 600 }}>Sekali Bayar</span>}
                   </td>
@@ -61,6 +62,34 @@ export default function CostComparison() {
           </div>
         </AnimatedSection>
 
+        {/* Mobile: cards */}
+        <div className="cost-mobile" style={{ marginTop: 40, display: 'none', flexDirection: 'column', gap: 12 }}>
+          {rows.map((row, i) => (
+            <AnimatedSection key={row.name} delay={0.1 + i * 0.08}>
+              <div style={{
+                borderRadius: 14, padding: '18px 20px',
+                background: row.highlight ? 'rgba(83,74,183,0.08)' : '#fff',
+                border: row.highlight ? '2px solid rgba(83,74,183,0.35)' : '1.5px solid var(--border-light)',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+                  <span style={{ fontWeight: 800, fontSize: '0.95rem', color: row.highlight ? 'var(--purple)' : 'var(--text-dark)' }}>{row.name}</span>
+                  {row.highlight && <span style={{ fontSize: '0.7rem', background: 'var(--purple)', color: '#fff', padding: '2px 8px', borderRadius: 999, fontWeight: 600, whiteSpace: 'nowrap' }}>Sekali Bayar</span>}
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
+                  {[['Tahun 1', row.y1], ['Tahun 3', row.y3], ['Tahun 5', row.y5]].map(([label, val]) => (
+                    <div key={label} style={{ textAlign: 'center', padding: '10px 4px', borderRadius: 10, background: row.highlight ? 'rgba(83,74,183,0.1)' : 'var(--bg-light)' }}>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-mid)', fontWeight: 600, marginBottom: 4 }}>{label}</div>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 800, color: row.highlight ? 'var(--purple)' : val > 5000000 ? '#DC2626' : 'var(--text-dark)' }}>
+                        <CountUp to={val / 1000000} prefix="Rp " suffix=" jt" duration={1.4} />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </AnimatedSection>
+          ))}
+        </div>
+
         <AnimatedSection delay={0.3} className="text-center" style={{ marginTop: 40 }}>
           <p style={{ fontSize: '1.15rem', fontWeight: 800, color: 'var(--text-dark)' }}>
             Bayar sekali.{' '}
@@ -72,6 +101,12 @@ export default function CostComparison() {
           </p>
         </AnimatedSection>
       </div>
+      <style>{`
+        @media (max-width: 640px) {
+          .cost-desktop { display: none !important; }
+          .cost-mobile { display: flex !important; }
+        }
+      `}</style>
     </section>
   )
 }

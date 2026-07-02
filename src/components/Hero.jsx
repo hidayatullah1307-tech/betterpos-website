@@ -136,6 +136,7 @@ export default function Hero() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             style={{ perspective: 1000 }}
+            className="hero-mockscreen"
           >
             <motion.div style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}>
               <div style={{ position: 'relative' }}>
@@ -152,6 +153,10 @@ export default function Hero() {
       <style>{`
         @media (max-width: 900px) {
           .hero-grid { grid-template-columns: 1fr !important; gap: 48px !important; }
+        }
+        @media (max-width: 640px) {
+          .hero-mockscreen { display: none !important; }
+          .hero-grid { min-height: unset !important; }
         }
       `}</style>
     </section>
