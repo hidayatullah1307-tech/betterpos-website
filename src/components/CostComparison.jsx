@@ -24,8 +24,9 @@ export default function CostComparison() {
           </p>
         </AnimatedSection>
 
-        <AnimatedSection delay={0.15} style={{ marginTop: 56, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, minWidth: 600 }}>
+        <AnimatedSection delay={0.15} style={{ marginTop: 56 }}>
+          <div style={{ overflowX: 'auto', width: '100%', WebkitOverflowScrolling: 'touch' }}>
+          <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, minWidth: 560 }}>
             <thead>
               <tr>
                 <th style={{ padding: '14px 20px', textAlign: 'left', fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-mid)', borderBottom: '2px solid var(--border-light)' }}>Aplikasi Kasir</th>
@@ -57,6 +58,7 @@ export default function CostComparison() {
               ))}
             </tbody>
           </table>
+          </div>
         </AnimatedSection>
 
         <AnimatedSection delay={0.3} className="text-center" style={{ marginTop: 40 }}>
