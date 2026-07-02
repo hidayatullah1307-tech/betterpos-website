@@ -17,7 +17,7 @@ export default function Navbar() {
     { label: 'Fitur', href: '#fitur' },
     { label: 'Harga', href: '#harga' },
     { label: 'Trial', href: '#trial' },
-    { label: 'Blog', href: 'https://blog.betterpos.id', external: true },
+    { label: 'Blog', href: 'https://betterpos.hashnode.dev', external: true },
     { label: 'Kontak', href: '#kontak' },
   ]
 
