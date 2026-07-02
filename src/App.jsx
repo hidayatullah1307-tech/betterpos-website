@@ -2,6 +2,7 @@ import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CostComparison from './components/CostComparison'
 import WhoIsThisFor from './components/WhoIsThisFor'
+import ScreenGallery from './components/ScreenGallery'
 import Features from './components/Features'
 import Pricing from './components/Pricing'
 import WhatsIncluded from './components/WhatsIncluded'
@@ -18,6 +19,7 @@ export default function App() {
       <Hero />
       <CostComparison />
       <WhoIsThisFor />
+      <ScreenGallery />
       <Features />
       <Pricing />
       <WhatsIncluded />
