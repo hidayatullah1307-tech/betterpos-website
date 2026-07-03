@@ -61,30 +61,29 @@ export default function ScreenGallery() {
         </AnimatedSection>
 
         {/* Desktop: 2-row parallax */}
-        <div className="gallery-desktop" style={{ position: 'relative', height: 680, marginTop: 72 }}>
-          {/* Background glow */}
-          <div style={{ position: 'absolute', top: '30%', left: '50%', transform: 'translateX(-50%)', width: 600, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(83,74,183,0.12) 0%, transparent 70%)', pointerEvents: 'none' }} />
+        <div className="gallery-desktop" style={{ position: 'relative', height: 460, marginTop: 56 }}>
+          <div style={{ position: 'absolute', top: '40%', left: '50%', transform: 'translateX(-50%)', width: 500, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(83,74,183,0.14) 0%, transparent 70%)', pointerEvents: 'none' }} />
 
-          {/* Row 1 — top 3 */}
-          <motion.div style={{ y: y0, position: 'absolute', left: '0%', top: '0%', width: '31%', zIndex: 2 }}>
-            <BrowserFrame src={screens[0].src} label={screens[0].label} rotate={-2.5} />
+          {/* Row 1 */}
+          <motion.div style={{ y: y0, position: 'absolute', left: '-2%', top: '0%', width: '34%', zIndex: 2 }}>
+            <BrowserFrame src={screens[0].src} label={screens[0].label} rotate={-3} />
           </motion.div>
 
-          <motion.div style={{ y: y1, position: 'absolute', left: '34.5%', top: '-2%', width: '31%', zIndex: 5 }}>
+          <motion.div style={{ y: y1, position: 'absolute', left: '33%', top: '-4%', width: '34%', zIndex: 5 }}>
             <BrowserFrame src={screens[1].src} label={screens[1].label} rotate={0} />
           </motion.div>
 
-          <motion.div style={{ y: y2, position: 'absolute', right: '0%', top: '1%', width: '31%', zIndex: 2 }}>
-            <BrowserFrame src={screens[2].src} label={screens[2].label} rotate={2.5} />
+          <motion.div style={{ y: y2, position: 'absolute', right: '-2%', top: '0%', width: '34%', zIndex: 2 }}>
+            <BrowserFrame src={screens[2].src} label={screens[2].label} rotate={3} />
           </motion.div>
 
-          {/* Row 2 — bottom 2, centered between gaps */}
-          <motion.div style={{ y: y3, position: 'absolute', left: '10%', top: '52%', width: '31%', zIndex: 3 }}>
-            <BrowserFrame src={screens[3].src} label={screens[3].label} rotate={-1.5} />
+          {/* Row 2 — tucked up, overlapping row 1 */}
+          <motion.div style={{ y: y3, position: 'absolute', left: '8%', top: '36%', width: '34%', zIndex: 3 }}>
+            <BrowserFrame src={screens[3].src} label={screens[3].label} rotate={-2} />
           </motion.div>
 
-          <motion.div style={{ y: y4, position: 'absolute', right: '10%', top: '55%', width: '31%', zIndex: 3 }}>
-            <BrowserFrame src={screens[4].src} label={screens[4].label} rotate={1.5} />
+          <motion.div style={{ y: y4, position: 'absolute', right: '8%', top: '38%', width: '34%', zIndex: 3 }}>
+            <BrowserFrame src={screens[4].src} label={screens[4].label} rotate={2} />
           </motion.div>
         </div>
 
