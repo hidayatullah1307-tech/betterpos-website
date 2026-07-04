@@ -14,7 +14,7 @@ export default function Navbar() {
   }, [])
 
   const links = [
-    { label: 'Fitur', href: '/#fitur' },
+    { label: 'Fitur Lengkap', href: '/fitur' },
     { label: 'Harga', href: '/#harga' },
     { label: 'Trial', href: '/#trial' },
     { label: 'Blog', href: '/blog' },

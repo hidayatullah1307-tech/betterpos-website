@@ -15,6 +15,7 @@ import Footer from './components/Footer'
 import BlogPage from './pages/BlogPage'
 import BlogPostPage from './pages/BlogPostPage'
 import NewPostPage from './pages/NewPostPage'
+import FeaturesPage from './pages/FeaturesPage'
 
 function HomePage() {
   return (
@@ -41,6 +42,7 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/fitur" element={<FeaturesPage />} />
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/new-post" element={<NewPostPage />} />
