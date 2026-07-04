@@ -105,7 +105,7 @@ export const faq = [
   },
   {
     q: 'Bisa dipakai di lebih dari satu komputer?',
-    a: 'Saat ini BetterPOS berjalan di satu komputer dengan satu database lokal. Jika ingin multi-komputer dalam satu jaringan, fitur ini ada di roadmap pengembangan berikutnya.',
+    a: 'Bisa, selama masih satu jaringan WiFi yang sama. Komputer utama menjalankan BetterPOS, lalu perangkat lain — laptop, tablet, atau PC lain — cukup buka browser dan akses lewat IP komputer utama. Data tetap di satu tempat dan bisa diakses bersama.',
   },
   {
     q: 'Apa yang terjadi kalau internet mati saat pakai BetterPOS?',
