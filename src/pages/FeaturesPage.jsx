@@ -21,11 +21,12 @@ function FeatureCard({ feature, isAdmin }) {
   async function uploadImage(file) {
     setUploading(true)
     try {
-      const arrayBuffer = await file.arrayBuffer()
-      const bytes = new Uint8Array(arrayBuffer)
-      let binary = ''
-      bytes.forEach(b => binary += String.fromCharCode(b))
-      const encoded = btoa(binary)
+      const encoded = await new Promise((resolve, reject) => {
+        const reader = new FileReader()
+        reader.onload = () => resolve(reader.result.split(',')[1])
+        reader.onerror = reject
+        reader.readAsDataURL(file)
+      })
 
       const path = `public/feature-images/${feature.id}.png`
       const checkRes = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
@@ -35,6 +36,8 @@ function FeatureCard({ feature, isAdmin }) {
       if (checkRes.ok) {
         const existing = await checkRes.json()
         body.sha = existing.sha
+      } else {
+        await checkRes.text()
       }
 
       const res = await fetch(`https://api.github.com/repos/${REPO}/contents/${path}`, {
@@ -42,7 +45,10 @@ function FeatureCard({ feature, isAdmin }) {
         headers: { 'Authorization': `Bearer ${pat}`, 'Content-Type': 'application/json' },
         body: JSON.stringify(body),
       })
-      if (!res.ok) throw new Error('Upload gagal')
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}))
+        throw new Error(errData.message || `Upload gagal (${res.status})`)
+      }
       setImgSrc(`/feature-images/${feature.id}.png?t=${Date.now()}`)
       setHasImg(true)
     } catch (e) {

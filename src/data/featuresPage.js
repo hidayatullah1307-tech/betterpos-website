@@ -80,7 +80,7 @@ export const features = [
   {
     id: 'bahasa',
     title: 'Dua Bahasa dalam Satu Aplikasi',
-    description: 'Bahasa Indonesia dan English tersedia. Cocok untuk tim yang campuran atau toko yang melayani pelanggan dari berbagai latar belakang.',
+    description: 'Bahasa Indonesia dan English tersedia. Pakai yang paling nyaman buat kamu — tanpa setting ribet, bisa ganti kapan saja.',
   },
   {
     id: 'offline',
