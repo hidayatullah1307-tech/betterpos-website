@@ -17,6 +17,13 @@ function renderContent(content) {
         {trimmed.slice(4)}
       </h3>
     )
+    const imgMatch = trimmed.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+    if (imgMatch) return (
+      <figure key={i} style={{ margin: '8px 0' }}>
+        <img src={imgMatch[2]} alt={imgMatch[1]} style={{ width: '100%', borderRadius: 10, display: 'block', border: '1px solid rgba(255,255,255,0.08)' }} />
+        {imgMatch[1] && <figcaption style={{ fontSize: '0.8rem', color: 'rgba(139,133,168,0.6)', marginTop: 8, textAlign: 'center' }}>{imgMatch[1]}</figcaption>}
+      </figure>
+    )
     return (
       <p key={i} style={{ fontSize: '1.05rem', color: 'var(--text-muted)', lineHeight: 1.8, marginBottom: 0 }}>
         {trimmed}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 const REPO = 'hidayatullah1307-tech/betterpos-website'
 const PAT_KEY = 'betterpos_gh_pat'
@@ -19,10 +19,49 @@ export default function NewPostPage() {
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [showPat, setShowPat] = useState(false)
+  const [uploading, setUploading] = useState(false)
+  const fileRef = useRef(null)
+  const textareaRef = useRef(null)
 
   useEffect(() => {
     if (pat) localStorage.setItem(PAT_KEY, pat)
   }, [pat])
+
+  async function uploadImage(file) {
+    if (!pat) { setError('Masukkan GitHub Token dulu sebelum upload gambar.'); return }
+    setUploading(true)
+    setError('')
+
+    try {
+      const ext = file.name.split('.').pop().toLowerCase()
+      const safeName = `${Date.now()}-${slugify(file.name.replace(/\.[^.]+$/, ''))}.${ext}`
+      const arrayBuffer = await file.arrayBuffer()
+      const bytes = new Uint8Array(arrayBuffer)
+      let binary = ''
+      bytes.forEach(b => binary += String.fromCharCode(b))
+      const encoded = btoa(binary)
+
+      const res = await fetch(`https://api.github.com/repos/${REPO}/contents/public/blog-images/${safeName}`, {
+        method: 'PUT',
+        headers: { 'Authorization': `Bearer ${pat}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: `blog: upload gambar ${safeName}`, content: encoded }),
+      })
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.message || `Error ${res.status}`)
+      }
+
+      const imageMarkup = `\n\n![${file.name}](/blog-images/${safeName})\n\n`
+      const textarea = textareaRef.current
+      const pos = textarea ? textarea.selectionStart : content.length
+      setContent(prev => prev.slice(0, pos) + imageMarkup + prev.slice(pos))
+    } catch (e) {
+      setError('Gagal upload gambar: ' + e.message)
+    } finally {
+      setUploading(false)
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
 
   async function publish() {
     if (!pat) { setError('Masukkan GitHub Token dulu.'); return }
@@ -81,7 +120,7 @@ export default function NewPostPage() {
                 type={showPat ? 'text' : 'password'}
                 value={pat}
                 onChange={e => setPat(e.target.value)}
-                placeholder="ghp_xxxxxxxxxxxx"
+                placeholder="github_pat_xxxxxxxxxxxx"
                 style={{ ...input, paddingRight: 48 }}
               />
               <button onClick={() => setShowPat(v => !v)}
@@ -112,13 +151,28 @@ export default function NewPostPage() {
           </div>
 
           <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-              Isi Artikel
-              <span style={{ fontWeight: 400, textTransform: 'none', marginLeft: 8, color: 'rgba(139,133,168,0.6)' }}>— baris kosong = paragraf baru, ## = judul bagian</span>
-            </label>
-            <textarea value={content} onChange={e => setContent(e.target.value)}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                Isi Artikel
+                <span style={{ fontWeight: 400, textTransform: 'none', marginLeft: 8, color: 'rgba(139,133,168,0.6)' }}>— baris kosong = paragraf baru, ## = judul bagian</span>
+              </label>
+              <button
+                onClick={() => fileRef.current?.click()}
+                disabled={uploading}
+                style={{
+                  padding: '6px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)',
+                  background: uploading ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.07)',
+                  color: uploading ? '#8B85A8' : '#F5F0FF', fontSize: '0.8rem', fontWeight: 600,
+                  cursor: uploading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap',
+                }}>
+                {uploading ? 'Mengupload...' : '+ Upload Gambar'}
+              </button>
+            </div>
+            <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
+              onChange={e => e.target.files[0] && uploadImage(e.target.files[0])} />
+            <textarea ref={textareaRef} value={content} onChange={e => setContent(e.target.value)}
               rows={18}
-              placeholder={`Tulis artikel di sini...\n\nBisa beberapa paragraf.\n\n## Judul Bagian\n\nLanjutkan isi di sini.`}
+              placeholder={`Tulis artikel di sini...\n\nBisa beberapa paragraf.\n\n## Judul Bagian\n\nLanjutkan isi di sini.\n\nGunakan tombol "Upload Gambar" untuk menyisipkan foto.`}
               style={{ ...input, resize: 'vertical', lineHeight: 1.7 }}
             />
           </div>
