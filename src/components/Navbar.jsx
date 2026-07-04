@@ -14,11 +14,11 @@ export default function Navbar() {
   }, [])
 
   const links = [
-    { label: 'Fitur', href: '#fitur' },
-    { label: 'Harga', href: '#harga' },
-    { label: 'Trial', href: '#trial' },
-    { label: 'Blog', href: 'https://betterpos.hashnode.dev', external: true },
-    { label: 'Kontak', href: '#kontak' },
+    { label: 'Fitur', href: '/#fitur' },
+    { label: 'Harga', href: '/#harga' },
+    { label: 'Trial', href: '/#trial' },
+    { label: 'Blog', href: '/blog' },
+    { label: 'Kontak', href: '/#kontak' },
   ]
 
   return (

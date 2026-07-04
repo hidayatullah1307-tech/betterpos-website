@@ -19,7 +19,7 @@ export default function Footer() {
               { label: 'Fitur', href: '#fitur' },
               { label: 'Harga', href: '#harga' },
               { label: 'Trial Gratis', href: '#trial' },
-              { label: 'Blog', href: 'https://betterpos.hashnode.dev', external: true },
+              { label: 'Blog', href: '/blog' },
               { label: 'Kontak', href: '#kontak' },
               { label: 'WhatsApp', href: `https://wa.me/${WA_NUMBER}`, external: true },
             ].map(l => (
