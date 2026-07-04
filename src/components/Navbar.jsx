@@ -36,7 +36,7 @@ export default function Navbar() {
         }}
       >
         <div className="container" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 68 }}>
-          <a href="#" style={{ fontWeight: 800, fontSize: '1.3rem', color: 'var(--text-light)', letterSpacing: '-0.02em' }}>
+          <a href="/" style={{ fontWeight: 800, fontSize: '1.3rem', color: 'var(--text-light)', letterSpacing: '-0.02em' }}>
             Better<span style={{ color: 'var(--gold)' }}>POS</span>
           </a>
 
