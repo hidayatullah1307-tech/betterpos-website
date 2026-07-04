@@ -94,6 +94,137 @@ export const features = [
   },
 ]
 
+export const allFeatures = [
+  {
+    category: 'Kasir & Transaksi',
+    items: [
+      'Tambah, hapus, dan ubah jumlah item di keranjang',
+      'Diskon per item atau per transaksi',
+      'Approval diskon berjenjang (kasir, manager, owner)',
+      'Pembayaran tunai dengan hitung kembalian otomatis',
+      'Pembayaran kartu, QRIS, dan transfer bank',
+      'Cetak struk langsung dari browser',
+      'Tampilan produk: grid foto, grid ringkas, dan list',
+      'Preferensi tampilan tersimpan per pengguna',
+      'Pencarian produk real-time',
+      'Filter produk berdasarkan kategori',
+    ],
+  },
+  {
+    category: 'Shift Kasir',
+    items: [
+      'Buka shift dengan pencatatan uang awal',
+      'Tutup shift dengan perhitungan selisih otomatis',
+      'Laporan ringkasan per shift',
+      'Owner dan manager bisa bergabung ke shift kasir',
+      'Beberapa kasir bisa aktif dalam satu sesi',
+      'Riwayat semua shift dengan detail lengkap',
+    ],
+  },
+  {
+    category: 'Produk & Katalog',
+    items: [
+      'Tambah, edit, dan nonaktifkan produk',
+      'Kode produk unik per item',
+      'Foto produk',
+      'Harga minimum dan maksimum per produk',
+      'Satuan produk (pcs, kg, liter, dll)',
+      'Status aktif atau nonaktif',
+      'Kelola kategori produk',
+      'Import produk massal via file CSV',
+      'Download template CSV siap pakai',
+      'Inventory item untuk bahan baku',
+      'Linking produk ke inventory item',
+    ],
+  },
+  {
+    category: 'Stok & Inventaris',
+    items: [
+      'Pengurangan stok otomatis setiap transaksi',
+      'Notifikasi stok menipis',
+      'Threshold stok rendah bisa dikonfigurasi',
+      'Adjustment stok manual dengan catatan alasan',
+      'Riwayat semua perubahan stok',
+      'Status stok: tersedia, menipis, habis, negatif',
+    ],
+  },
+  {
+    category: 'Purchase Order & Supplier',
+    items: [
+      'Buat PO ke supplier dengan multi-item',
+      'Nomor invoice per PO',
+      'Status pengiriman dan pembayaran PO',
+      'Cicilan pembayaran supplier dengan riwayat',
+      'Lampirkan foto nota dan file dokumen per PO',
+      'Goods receiving langsung dari halaman PO',
+      'Partial receiving (terima sebagian dulu)',
+      'Substitusi barang saat receiving',
+      'Riwayat receiving per PO',
+      'Tambah supplier baru langsung dari form PO',
+      'Kode supplier unik',
+      'Status supplier aktif atau nonaktif',
+    ],
+  },
+  {
+    category: 'Laporan & Keuangan',
+    items: [
+      'Riwayat semua transaksi dengan detail lengkap',
+      'Filter by tanggal, kasir, dan metode bayar',
+      'Pencarian transaksi',
+      'Export data transaksi ke CSV',
+      'Cetak ulang struk dari riwayat transaksi',
+      'Financial overview: omzet, pembelian, dan laba',
+      'Perhitungan laba dengan dan tanpa pajak',
+      'Toggle periode: harian, mingguan, bulanan',
+      'Laporan ringkasan per shift',
+    ],
+  },
+  {
+    category: 'Staf & Kontrol Akses',
+    items: [
+      'Tiga level role: owner, manager, dan kasir',
+      'Tambah dan edit akun staf',
+      'Ubah username, nama, dan password staf',
+      'PIN approval manager untuk diskon menengah',
+      'PIN approval owner untuk diskon besar',
+      'Kasir tidak bisa akses laporan keuangan',
+      'Manager tidak bisa kelola pengaturan utama',
+    ],
+  },
+  {
+    category: 'Audit & Keamanan',
+    items: [
+      'Activity log: semua perubahan tercatat otomatis',
+      'Catat siapa yang melakukan perubahan dan kapan',
+      'Filter log berdasarkan modul dan tingkat keparahan',
+      'Tidak ada mekanisme lockout — akses tidak pernah diblokir',
+    ],
+  },
+  {
+    category: 'Pengaturan & Personalisasi',
+    items: [
+      'Nama toko',
+      'Tarif pajak bisa dikonfigurasi (default 11%)',
+      'Threshold stok rendah',
+      'Kelola PIN approval owner dan manager',
+      'Dark mode dan light mode',
+      'Antarmuka Bahasa Indonesia dan English',
+    ],
+  },
+  {
+    category: 'Infrastruktur & Data',
+    items: [
+      '100% offline — tidak butuh internet sama sekali',
+      'Data tersimpan lokal di komputer sendiri',
+      'Bisa diakses dari perangkat lain di jaringan yang sama',
+      'Installable sebagai PWA di Android',
+      'Backup database dengan satu klik',
+      'Restore dari file backup ke komputer baru',
+      'Tidak ada langganan, tidak ada server cloud',
+    ],
+  },
+]
+
 export const faq = [
   {
     q: 'Harus pakai komputer atau laptop? Tidak bisa di HP?',

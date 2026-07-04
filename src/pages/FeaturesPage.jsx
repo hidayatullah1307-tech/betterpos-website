@@ -2,7 +2,7 @@ import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
-import { requirements, features, faq } from '../data/featuresPage.js'
+import { requirements, features, allFeatures, faq } from '../data/featuresPage.js'
 
 const REPO = 'hidayatullah1307-tech/betterpos-website'
 const PAT_KEY = 'betterpos_gh_pat'
@@ -205,13 +205,41 @@ export default function FeaturesPage() {
 
         {/* Features Grid */}
         <div className="container" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px', marginBottom: 80 }}>
-          <p style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7B72D4', marginBottom: 12 }}>Fitur</p>
-          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#F5F0FF', letterSpacing: '-0.02em', marginBottom: 36 }}>15 Fitur dalam Satu Sistem</h2>
+          <p style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7B72D4', marginBottom: 12 }}>Fitur Unggulan</p>
+          <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#F5F0FF', letterSpacing: '-0.02em', marginBottom: 36 }}>Yang Membedakan BetterPOS</h2>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
             {features.map(f => (
               <FeatureCard key={f.id} feature={f} isAdmin={isAdmin} />
             ))}
+          </div>
+        </div>
+
+        {/* All Features List */}
+        <div style={{ background: 'rgba(255,255,255,0.02)', borderTop: '1px solid rgba(255,255,255,0.06)', borderBottom: '1px solid rgba(255,255,255,0.06)', padding: '60px 0', marginBottom: 80 }}>
+          <div className="container" style={{ maxWidth: 1100, margin: '0 auto', padding: '0 24px' }}>
+            <p style={{ fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#7B72D4', marginBottom: 12 }}>Daftar Lengkap</p>
+            <h2 style={{ fontSize: 'clamp(1.5rem, 3vw, 2rem)', fontWeight: 800, color: '#F5F0FF', letterSpacing: '-0.02em', marginBottom: 8 }}>
+              Semua yang Ada di Dalamnya
+            </h2>
+            <p style={{ fontSize: '0.92rem', color: '#8B85A8', marginBottom: 40 }}>
+              {allFeatures.reduce((acc, cat) => acc + cat.items.length, 0)}+ fitur dalam satu sistem, tanpa biaya bulanan.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 32 }}>
+              {allFeatures.map((cat, i) => (
+                <div key={i}>
+                  <h3 style={{ fontSize: '0.82rem', fontWeight: 800, color: '#7B72D4', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 14 }}>{cat.category}</h3>
+                  <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 9 }}>
+                    {cat.items.map((item, j) => (
+                      <li key={j} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                        <span style={{ color: '#534AB7', fontWeight: 700, fontSize: '0.9rem', flexShrink: 0, marginTop: 1 }}>✓</span>
+                        <span style={{ fontSize: '0.88rem', color: '#8B85A8', lineHeight: 1.5 }}>{item}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
