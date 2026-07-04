@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useSearchParams } from 'react-router-dom'
 
 const REPO = 'hidayatullah1307-tech/betterpos-website'
 const PAT_KEY = 'betterpos_gh_pat'
@@ -11,15 +12,21 @@ function slugify(str) {
 }
 
 export default function NewPostPage() {
+  const [searchParams] = useSearchParams()
+  const editSlug = searchParams.get('edit')
+  const isEdit = !!editSlug
+
   const [pat, setPat] = useState(() => localStorage.getItem(PAT_KEY) || '')
   const [title, setTitle] = useState('')
   const [excerpt, setExcerpt] = useState('')
   const [tags, setTags] = useState('')
   const [content, setContent] = useState('')
+  const [fileSha, setFileSha] = useState(null)
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
   const [showPat, setShowPat] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [loading, setLoading] = useState(isEdit)
   const fileRef = useRef(null)
   const textareaRef = useRef(null)
 
@@ -27,11 +34,39 @@ export default function NewPostPage() {
     if (pat) localStorage.setItem(PAT_KEY, pat)
   }, [pat])
 
+  useEffect(() => {
+    if (!isEdit || !pat) { if (isEdit && !pat) setLoading(false); return }
+    loadPost()
+  }, [isEdit, pat])
+
+  async function loadPost() {
+    setLoading(true)
+    setError('')
+    try {
+      const res = await fetch(`https://api.github.com/repos/${REPO}/contents/src/blog/posts/${editSlug}.js`, {
+        headers: { 'Authorization': `Bearer ${pat}` }
+      })
+      if (!res.ok) throw new Error('Artikel tidak ditemukan.')
+      const data = await res.json()
+      setFileSha(data.sha)
+      const decoded = atob(data.content.replace(/\n/g, ''))
+      const jsonStr = decoded.replace(/^export default\s*/, '').trim()
+      const post = JSON.parse(jsonStr)
+      setTitle(post.title || '')
+      setExcerpt(post.excerpt || '')
+      setTags((post.tags || []).join(', '))
+      setContent(post.content || '')
+    } catch (e) {
+      setError('Gagal load artikel: ' + e.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   async function uploadImage(file) {
     if (!pat) { setError('Masukkan GitHub Token dulu sebelum upload gambar.'); return }
     setUploading(true)
     setError('')
-
     try {
       const ext = file.name.split('.').pop().toLowerCase()
       const safeName = `${Date.now()}-${slugify(file.name.replace(/\.[^.]+$/, ''))}.${ext}`
@@ -50,7 +85,6 @@ export default function NewPostPage() {
         const data = await res.json()
         throw new Error(data.message || `Error ${res.status}`)
       }
-
       const imageMarkup = `\n\n![${file.name}](/blog-images/${safeName})\n\n`
       const textarea = textareaRef.current
       const pos = textarea ? textarea.selectionStart : content.length
@@ -71,25 +105,33 @@ export default function NewPostPage() {
     setStatus('publishing')
     setError('')
 
-    const slug = slugify(title)
-    const date = new Date().toISOString().slice(0, 10)
+    const slug = isEdit ? editSlug : slugify(title)
+    const date = isEdit ? undefined : new Date().toISOString().slice(0, 10)
     const tagArr = tags.split(',').map(t => t.trim()).filter(Boolean)
 
-    const fileContent = `export default ${JSON.stringify({ slug, title: title.trim(), date, excerpt: excerpt.trim(), tags: tagArr, content: content.trim() }, null, 2)}\n`
+    const postData = { slug, title: title.trim(), excerpt: excerpt.trim(), tags: tagArr, content: content.trim() }
+    if (!isEdit) postData.date = date
+
+    const fileContent = `export default ${JSON.stringify(postData, null, 2)}\n`
     const encoded = btoa(unescape(encodeURIComponent(fileContent)))
+
+    const body = { message: `blog: ${isEdit ? 'edit' : 'tambah'} artikel "${title.trim()}"`, content: encoded }
+    if (isEdit && fileSha) body.sha = fileSha
 
     try {
       const res = await fetch(`https://api.github.com/repos/${REPO}/contents/src/blog/posts/${slug}.js`, {
         method: 'PUT',
         headers: { 'Authorization': `Bearer ${pat}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: `blog: tambah artikel "${title.trim()}"`, content: encoded }),
+        body: JSON.stringify(body),
       })
       if (!res.ok) {
         const data = await res.json()
         throw new Error(data.message || `Error ${res.status}`)
       }
+      const resData = await res.json()
+      if (isEdit) setFileSha(resData.content?.sha || fileSha)
       setStatus('success')
-      setTitle(''); setExcerpt(''); setTags(''); setContent('')
+      if (!isEdit) { setTitle(''); setExcerpt(''); setTags(''); setContent('') }
     } catch (e) {
       setError(e.message)
       setStatus('idle')
@@ -108,98 +150,103 @@ export default function NewPostPage() {
 
         <div style={{ marginBottom: 40 }}>
           <p style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#7B72D4', marginBottom: 10 }}>BetterPOS</p>
-          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#F5F0FF', letterSpacing: '-0.03em' }}>Tulis Artikel Baru</h1>
+          <h1 style={{ fontSize: '2rem', fontWeight: 800, color: '#F5F0FF', letterSpacing: '-0.03em' }}>
+            {isEdit ? 'Edit Artikel' : 'Tulis Artikel Baru'}
+          </h1>
+          {isEdit && <a href="/blog" style={{ fontSize: '0.85rem', color: '#8B85A8', textDecoration: 'none', marginTop: 8, display: 'inline-block' }}>← Kembali ke Blog</a>}
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+        {loading ? (
+          <div style={{ color: '#8B85A8', fontSize: '1rem', padding: '40px 0' }}>Memuat artikel...</div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-          <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>GitHub Token</label>
-            <div style={{ position: 'relative' }}>
-              <input
-                type={showPat ? 'text' : 'password'}
-                value={pat}
-                onChange={e => setPat(e.target.value)}
-                placeholder="github_pat_xxxxxxxxxxxx"
-                style={{ ...input, paddingRight: 48 }}
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>GitHub Token</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPat ? 'text' : 'password'}
+                  value={pat}
+                  onChange={e => setPat(e.target.value)}
+                  placeholder="github_pat_xxxxxxxxxxxx"
+                  style={{ ...input, paddingRight: 48 }}
+                />
+                <button onClick={() => setShowPat(v => !v)}
+                  style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#8B85A8', fontSize: '0.9rem' }}>
+                  {showPat ? '🙈' : '👁'}
+                </button>
+              </div>
+              <p style={{ fontSize: '0.75rem', color: 'rgba(139,133,168,0.6)', marginTop: 6 }}>Disimpan di browser. Perlu permission: Contents (Read & Write).</p>
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Judul</label>
+              <input type="text" value={title} onChange={e => setTitle(e.target.value)}
+                placeholder="Contoh: Tips Kelola Stok Toko Baju" style={input} />
+              {title && !isEdit && <p style={{ fontSize: '0.75rem', color: 'rgba(139,133,168,0.5)', marginTop: 5 }}>URL: /blog/{slugify(title)}</p>}
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Deskripsi Singkat</label>
+              <input type="text" value={excerpt} onChange={e => setExcerpt(e.target.value)}
+                placeholder="1–2 kalimat yang muncul di daftar blog" style={input} />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Tags</label>
+              <input type="text" value={tags} onChange={e => setTags(e.target.value)}
+                placeholder="kasir, stok, umkm (pisahkan dengan koma)" style={input} />
+            </div>
+
+            <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+                  Isi Artikel
+                  <span style={{ fontWeight: 400, textTransform: 'none', marginLeft: 8, color: 'rgba(139,133,168,0.6)' }}>— baris kosong = paragraf, ## = judul bagian</span>
+                </label>
+                <button onClick={() => fileRef.current?.click()} disabled={uploading}
+                  style={{
+                    padding: '6px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)',
+                    background: uploading ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.07)',
+                    color: uploading ? '#8B85A8' : '#F5F0FF', fontSize: '0.8rem', fontWeight: 600,
+                    cursor: uploading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap',
+                  }}>
+                  {uploading ? 'Mengupload...' : '+ Upload Gambar'}
+                </button>
+              </div>
+              <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
+                onChange={e => e.target.files[0] && uploadImage(e.target.files[0])} />
+              <textarea ref={textareaRef} value={content} onChange={e => setContent(e.target.value)}
+                rows={18}
+                placeholder="Tulis artikel di sini..."
+                style={{ ...input, resize: 'vertical', lineHeight: 1.7 }}
               />
-              <button onClick={() => setShowPat(v => !v)}
-                style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#8B85A8', fontSize: '0.9rem' }}>
-                {showPat ? '🙈' : '👁'}
-              </button>
             </div>
-            <p style={{ fontSize: '0.75rem', color: 'rgba(139,133,168,0.6)', marginTop: 6 }}>Disimpan di browser. Perlu permission: Contents (Read & Write).</p>
+
+            {error && (
+              <div style={{ background: 'rgba(163,45,45,0.15)', border: '1px solid rgba(163,45,45,0.4)', borderRadius: 8, padding: '12px 16px', color: '#FCA5A5', fontSize: '0.9rem' }}>
+                {error}
+              </div>
+            )}
+
+            {status === 'success' && (
+              <div style={{ background: 'rgba(29,158,117,0.15)', border: '1px solid rgba(29,158,117,0.4)', borderRadius: 8, padding: '16px', color: '#6EE7B7', fontSize: '0.9rem' }}>
+                <strong>{isEdit ? 'Artikel berhasil diupdate!' : 'Artikel berhasil dipublish!'}</strong> Vercel sedang deploy — tunggu 1–2 menit lalu cek di{' '}
+                <a href="/blog" style={{ color: '#6EE7B7' }}>betterpos.my.id/blog</a>.
+              </div>
+            )}
+
+            <button onClick={publish} disabled={status === 'publishing'}
+              style={{
+                padding: '14px 32px', borderRadius: 10, border: 'none', cursor: status === 'publishing' ? 'not-allowed' : 'pointer',
+                background: status === 'publishing' ? 'rgba(83,74,183,0.5)' : '#534AB7',
+                color: '#fff', fontSize: '1rem', fontWeight: 700, fontFamily: 'inherit',
+                transition: 'background 0.2s', alignSelf: 'flex-start',
+              }}>
+              {status === 'publishing' ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Publish Artikel'}
+            </button>
           </div>
-
-          <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Judul</label>
-            <input type="text" value={title} onChange={e => setTitle(e.target.value)}
-              placeholder="Contoh: Tips Kelola Stok Toko Baju" style={input} />
-            {title && <p style={{ fontSize: '0.75rem', color: 'rgba(139,133,168,0.5)', marginTop: 5 }}>URL: /blog/{slugify(title)}</p>}
-          </div>
-
-          <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Deskripsi Singkat</label>
-            <input type="text" value={excerpt} onChange={e => setExcerpt(e.target.value)}
-              placeholder="1–2 kalimat yang muncul di daftar blog" style={input} />
-          </div>
-
-          <div>
-            <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', marginBottom: 8, letterSpacing: '0.04em', textTransform: 'uppercase' }}>Tags</label>
-            <input type="text" value={tags} onChange={e => setTags(e.target.value)}
-              placeholder="kasir, stok, umkm (pisahkan dengan koma)" style={input} />
-          </div>
-
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#8B85A8', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
-                Isi Artikel
-                <span style={{ fontWeight: 400, textTransform: 'none', marginLeft: 8, color: 'rgba(139,133,168,0.6)' }}>— baris kosong = paragraf baru, ## = judul bagian</span>
-              </label>
-              <button
-                onClick={() => fileRef.current?.click()}
-                disabled={uploading}
-                style={{
-                  padding: '6px 14px', borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)',
-                  background: uploading ? 'rgba(255,255,255,0.03)' : 'rgba(255,255,255,0.07)',
-                  color: uploading ? '#8B85A8' : '#F5F0FF', fontSize: '0.8rem', fontWeight: 600,
-                  cursor: uploading ? 'not-allowed' : 'pointer', fontFamily: 'inherit', whiteSpace: 'nowrap',
-                }}>
-                {uploading ? 'Mengupload...' : '+ Upload Gambar'}
-              </button>
-            </div>
-            <input ref={fileRef} type="file" accept="image/*" style={{ display: 'none' }}
-              onChange={e => e.target.files[0] && uploadImage(e.target.files[0])} />
-            <textarea ref={textareaRef} value={content} onChange={e => setContent(e.target.value)}
-              rows={18}
-              placeholder={`Tulis artikel di sini...\n\nBisa beberapa paragraf.\n\n## Judul Bagian\n\nLanjutkan isi di sini.\n\nGunakan tombol "Upload Gambar" untuk menyisipkan foto.`}
-              style={{ ...input, resize: 'vertical', lineHeight: 1.7 }}
-            />
-          </div>
-
-          {error && (
-            <div style={{ background: 'rgba(163,45,45,0.15)', border: '1px solid rgba(163,45,45,0.4)', borderRadius: 8, padding: '12px 16px', color: '#FCA5A5', fontSize: '0.9rem' }}>
-              {error}
-            </div>
-          )}
-
-          {status === 'success' && (
-            <div style={{ background: 'rgba(29,158,117,0.15)', border: '1px solid rgba(29,158,117,0.4)', borderRadius: 8, padding: '16px', color: '#6EE7B7', fontSize: '0.9rem' }}>
-              <strong>Artikel berhasil dipublish!</strong> Vercel sedang deploy — tunggu 1–2 menit lalu cek di{' '}
-              <a href="/blog" style={{ color: '#6EE7B7' }}>betterpos.my.id/blog</a>.
-            </div>
-          )}
-
-          <button onClick={publish} disabled={status === 'publishing'}
-            style={{
-              padding: '14px 32px', borderRadius: 10, border: 'none', cursor: status === 'publishing' ? 'not-allowed' : 'pointer',
-              background: status === 'publishing' ? 'rgba(83,74,183,0.5)' : '#534AB7',
-              color: '#fff', fontSize: '1rem', fontWeight: 700, fontFamily: 'inherit',
-              transition: 'background 0.2s', alignSelf: 'flex-start',
-            }}>
-            {status === 'publishing' ? 'Mempublish...' : 'Publish Artikel'}
-          </button>
-        </div>
+        )}
       </div>
     </div>
   )
