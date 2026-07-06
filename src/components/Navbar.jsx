@@ -18,6 +18,7 @@ export default function Navbar() {
     { label: 'Harga', href: '/#harga' },
     { label: 'Trial', href: '/#trial' },
     { label: 'Blog', href: '/blog' },
+    { label: 'Kemitraan', href: '/kemitraan' },
     { label: 'Kontak', href: '/#kontak' },
   ]
 

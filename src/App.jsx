@@ -16,6 +16,7 @@ import BlogPage from './pages/BlogPage'
 import BlogPostPage from './pages/BlogPostPage'
 import NewPostPage from './pages/NewPostPage'
 import FeaturesPage from './pages/FeaturesPage'
+import SalesPage from './pages/SalesPage'
 
 function HomePage() {
   return (
@@ -46,6 +47,7 @@ export default function App() {
         <Route path="/blog" element={<BlogPage />} />
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/new-post" element={<NewPostPage />} />
+        <Route path="/kemitraan" element={<SalesPage />} />
       </Routes>
     </BrowserRouter>
   )
