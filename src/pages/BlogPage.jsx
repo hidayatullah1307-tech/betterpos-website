@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { posts } from '../blog/index.js'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -9,6 +10,14 @@ export default function BlogPage() {
   const canEdit = hasToken()
   return (
     <>
+      <Helmet>
+        <title>Blog BetterPOS | Tips &amp; Panduan untuk Pemilik Toko</title>
+        <meta name="description" content="Artikel dan tips seputar manajemen toko, kasir digital, pencatatan stok, dan keuangan untuk pemilik usaha retail Indonesia." />
+        <meta property="og:title" content="Blog BetterPOS | Tips & Panduan untuk Pemilik Toko" />
+        <meta property="og:description" content="Artikel dan tips seputar manajemen toko, kasir digital, pencatatan stok, dan keuangan untuk pemilik usaha retail Indonesia." />
+        <meta property="og:url" content="https://betterpos.my.id/blog" />
+        <link rel="canonical" href="https://betterpos.my.id/blog" />
+      </Helmet>
       <Navbar />
       <div style={{ background: 'var(--bg-dark)', minHeight: '100vh', paddingTop: 100, paddingBottom: 80 }}>
         <div className="container" style={{ maxWidth: 760, margin: '0 auto', padding: '0 24px' }}>

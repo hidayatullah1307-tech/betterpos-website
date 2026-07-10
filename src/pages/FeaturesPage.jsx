@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import { requirements, features, allFeatures, faq } from '../data/featuresPage.js'
@@ -140,6 +141,14 @@ export default function FeaturesPage() {
 
   return (
     <>
+      <Helmet>
+        <title>Fitur Lengkap BetterPOS | Software Kasir Offline Indonesia</title>
+        <meta name="description" content="Lihat semua fitur BetterPOS: kasir offline tanpa internet, stok otomatis, laporan keuangan, manajemen pelanggan, purchase order, dan banyak lagi. Tanpa biaya bulanan." />
+        <meta property="og:title" content="Fitur Lengkap BetterPOS | Software Kasir Offline Indonesia" />
+        <meta property="og:description" content="Kasir offline tanpa internet, stok otomatis, laporan keuangan, manajemen pelanggan, purchase order, dan banyak lagi. Tanpa biaya bulanan." />
+        <meta property="og:url" content="https://betterpos.my.id/fitur" />
+        <link rel="canonical" href="https://betterpos.my.id/fitur" />
+      </Helmet>
       <Navbar />
       <div style={{ background: '#0D0C1D', minHeight: '100vh', paddingTop: 100, paddingBottom: 80 }}>
 

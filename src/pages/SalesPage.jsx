@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion'
+import { Helmet } from 'react-helmet-async'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
 import AnimatedSection from '../components/shared/AnimatedSection'
@@ -94,6 +95,14 @@ function StepsRow({ steps, dark }) {
 export default function SalesPage() {
   return (
     <>
+      <Helmet>
+        <title>Program Kemitraan BetterPOS | Affiliate &amp; Sales Partner</title>
+        <meta name="description" content="Dapat komisi 15–20% dari setiap penjualan BetterPOS. Program affiliate otomatis untuk semua pembeli, atau daftar jadi Sales Partner aktif." />
+        <meta property="og:title" content="Program Kemitraan BetterPOS | Affiliate & Sales Partner" />
+        <meta property="og:description" content="Dapat komisi 15–20% dari setiap penjualan BetterPOS. Program affiliate otomatis untuk semua pembeli, atau daftar jadi Sales Partner aktif." />
+        <meta property="og:url" content="https://betterpos.my.id/kemitraan" />
+        <link rel="canonical" href="https://betterpos.my.id/kemitraan" />
+      </Helmet>
       <Navbar />
 
       {/* Hero */}

@@ -1,4 +1,5 @@
 import { useParams, Link } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import { getPost } from '../blog/index.js'
 import Navbar from '../components/Navbar'
 import Footer from '../components/Footer'
@@ -49,6 +50,14 @@ export default function BlogPostPage() {
 
   return (
     <>
+      <Helmet>
+        <title>{post.title} | Blog BetterPOS</title>
+        <meta name="description" content={post.excerpt} />
+        <meta property="og:title" content={`${post.title} | Blog BetterPOS`} />
+        <meta property="og:description" content={post.excerpt} />
+        <meta property="og:url" content={`https://betterpos.my.id/blog/${post.slug}`} />
+        <link rel="canonical" href={`https://betterpos.my.id/blog/${post.slug}`} />
+      </Helmet>
       <Navbar />
       <div style={{ background: 'var(--bg-dark)', minHeight: '100vh', paddingTop: 100, paddingBottom: 80 }}>
         <div style={{ maxWidth: 680, margin: '0 auto', padding: '0 24px' }}>

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { Helmet } from 'react-helmet-async'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import CostComparison from './components/CostComparison'
@@ -21,6 +22,14 @@ import SalesPage from './pages/SalesPage'
 function HomePage() {
   return (
     <>
+      <Helmet>
+        <title>BetterPOS — Kasir Profesional, Sekali Bayar Selamanya</title>
+        <meta name="description" content="Sistem kasir digital offline untuk toko Indonesia. Tidak perlu internet, tidak ada biaya bulanan. Sekali beli, pakai selamanya. Coba gratis 14 hari." />
+        <meta property="og:url" content="https://betterpos.my.id/" />
+        <meta property="og:title" content="BetterPOS — Kasir Profesional, Sekali Bayar Selamanya" />
+        <meta property="og:description" content="Tidak perlu internet. Tidak ada biaya bulanan. Sistem kasir offline sekelas aplikasi premium — harga sekali bayar, pakai selamanya." />
+        <link rel="canonical" href="https://betterpos.my.id/" />
+      </Helmet>
       <Navbar />
       <Hero />
       <CostComparison />
