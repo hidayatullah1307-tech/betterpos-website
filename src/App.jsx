@@ -20,6 +20,10 @@ import BlogPostPage from './pages/BlogPostPage'
 import NewPostPage from './pages/NewPostPage'
 import FeaturesPage from './pages/FeaturesPage'
 import SalesPage from './pages/SalesPage'
+import TermsPage from './pages/TermsPage'
+import PrivacyPage from './pages/PrivacyPage'
+import AffiliateTermsPage from './pages/AffiliateTermsPage'
+import RefundPage from './pages/RefundPage'
 
 function HomePage() {
   const [bannerVisible, setBannerVisible] = useState(true)
@@ -62,6 +66,10 @@ export default function App() {
         <Route path="/blog/:slug" element={<BlogPostPage />} />
         <Route path="/new-post" element={<NewPostPage />} />
         <Route path="/kemitraan" element={<SalesPage />} />
+        <Route path="/syarat-ketentuan" element={<TermsPage />} />
+        <Route path="/privasi" element={<PrivacyPage />} />
+        <Route path="/kebijakan-mitra" element={<AffiliateTermsPage />} />
+        <Route path="/pengembalian-dana" element={<RefundPage />} />
       </Routes>
     </BrowserRouter>
   )

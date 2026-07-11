@@ -1,5 +1,12 @@
 const WA_NUMBER = '6282214918503'
 
+const legalLinks = [
+  { label: 'Syarat & Ketentuan', href: '/syarat-ketentuan' },
+  { label: 'Kebijakan Privasi', href: '/privasi' },
+  { label: 'Kebijakan Afiliasi & Mitra', href: '/kebijakan-mitra' },
+  { label: 'Pengembalian Dana', href: '/pengembalian-dana' },
+]
+
 export default function Footer() {
   return (
     <footer style={{ background: 'var(--bg-dark)', borderTop: '1px solid var(--border-dark)', padding: '40px 0' }}>
@@ -10,7 +17,7 @@ export default function Footer() {
               Better<span style={{ color: 'var(--gold)' }}>POS</span>
             </div>
             <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', marginTop: 6 }}>
-              © 2025 BetterPOS. Semua hak dilindungi.
+              © 2026 BetterPOS. Semua hak dilindungi.
             </p>
           </div>
 
@@ -20,6 +27,7 @@ export default function Footer() {
               { label: 'Harga', href: '#harga' },
               { label: 'Trial Gratis', href: '#trial' },
               { label: 'Blog', href: '/blog' },
+              { label: 'Kemitraan', href: '/kemitraan' },
               { label: 'Kontak', href: '#kontak' },
               { label: 'WhatsApp', href: `https://wa.me/${WA_NUMBER}`, external: true },
             ].map(l => (
@@ -32,6 +40,20 @@ export default function Footer() {
               </a>
             ))}
           </nav>
+        </div>
+
+        <div style={{ marginTop: 24, paddingTop: 20, borderTop: '1px solid var(--border-dark)', display: 'flex', gap: 20, flexWrap: 'wrap', alignItems: 'center' }}>
+          {legalLinks.map((l, i) => (
+            <span key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+              <a href={l.href}
+                style={{ fontSize: '0.78rem', color: 'var(--text-muted)', fontWeight: 500, transition: 'color 0.15s' }}
+                onMouseEnter={e => e.target.style.color = 'var(--text-light)'}
+                onMouseLeave={e => e.target.style.color = 'var(--text-muted)'}>
+                {l.label}
+              </a>
+              {i < legalLinks.length - 1 && <span style={{ color: 'var(--border-dark)', fontSize: '0.78rem' }}>·</span>}
+            </span>
+          ))}
         </div>
       </div>
     </footer>
