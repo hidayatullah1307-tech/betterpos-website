@@ -13,6 +13,7 @@ const plans = [
     badge: null,
     features: [
       '1 akun kasir & 1 akun manager',
+      'Bisa diakses dari device berbeda (owner, manager, kasir)',
       'Kasir (cash, kartu, QRIS, transfer)',
       'Produk, kategori & stok otomatis',
       'Riwayat transaksi & retur',
@@ -31,8 +32,8 @@ const plans = [
     badgeVariant: 'gold',
     featured: true,
     features: [
-      'Kasir & manager tidak terbatas — berapapun akun',
-      'Multi-device bersamaan (tablet, HP, laptop di WiFi yang sama)',
+      'Akun kasir & manager tidak terbatas',
+      'Multi-meja kasir bersamaan — 2, 3, 4 kasir aktif sekaligus',
       'Semua fitur Essential',
       'Diskon & promosi dengan PIN approval',
       'Pelanggan, kredit & lacak piutang',
