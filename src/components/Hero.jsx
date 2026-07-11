@@ -65,7 +65,7 @@ function MockScreen() {
   )
 }
 
-export default function Hero() {
+export default function Hero({ bannerOffset = 0 }) {
   const containerRef = useRef(null)
   const mouseX = useMotionValue(0)
   const mouseY = useMotionValue(0)
@@ -82,7 +82,7 @@ export default function Hero() {
   const resetMouse = () => { mouseX.set(0); mouseY.set(0) }
 
   return (
-    <section style={{ background: 'var(--bg-dark)', minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 80, paddingBottom: 80, position: 'relative', overflow: 'hidden' }}>
+    <section style={{ background: 'var(--bg-dark)', minHeight: '100vh', display: 'flex', alignItems: 'center', paddingTop: 80 + bannerOffset, paddingBottom: 80, position: 'relative', overflow: 'hidden' }}>
       <div style={{ position: 'absolute', top: '20%', left: '5%', width: 500, height: 500, borderRadius: '50%', background: 'radial-gradient(circle, rgba(83,74,183,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', top: '40%', right: '0%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%)', pointerEvents: 'none' }} />
 

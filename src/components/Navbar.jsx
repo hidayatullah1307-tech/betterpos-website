@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const WA_NUMBER = '6282214918503'
 
-export default function Navbar() {
+export default function Navbar({ bannerOffset = 0 }) {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
 
@@ -29,7 +29,7 @@ export default function Navbar() {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
         style={{
-          position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+          position: 'fixed', top: bannerOffset, left: 0, right: 0, zIndex: 100,
           transition: 'background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease',
           background: scrolled ? 'rgba(13,12,29,0.85)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',

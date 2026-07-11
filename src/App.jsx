@@ -1,7 +1,9 @@
+import { useState } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Helmet } from 'react-helmet-async'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
+import PromoBanner from './components/PromoBanner'
 import CostComparison from './components/CostComparison'
 import WhoIsThisFor from './components/WhoIsThisFor'
 import ScreenGallery from './components/ScreenGallery'
@@ -20,6 +22,8 @@ import FeaturesPage from './pages/FeaturesPage'
 import SalesPage from './pages/SalesPage'
 
 function HomePage() {
+  const [bannerVisible, setBannerVisible] = useState(true)
+
   return (
     <>
       <Helmet>
@@ -30,8 +34,9 @@ function HomePage() {
         <meta property="og:description" content="Tidak perlu internet. Tidak ada biaya bulanan. Sistem kasir offline sekelas aplikasi premium — harga sekali bayar, pakai selamanya." />
         <link rel="canonical" href="https://betterpos.my.id/" />
       </Helmet>
-      <Navbar />
-      <Hero />
+      <PromoBanner visible={bannerVisible} onDismiss={() => setBannerVisible(false)} />
+      <Navbar bannerOffset={bannerVisible ? 40 : 0} />
+      <Hero bannerOffset={bannerVisible ? 40 : 0} />
       <CostComparison />
       <WhoIsThisFor />
       <ScreenGallery />
