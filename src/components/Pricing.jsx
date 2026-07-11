@@ -219,7 +219,7 @@ export default function Pricing() {
           }}>
             {[
               { icon: '🔁', text: 'Perpanjang update & support: Rp 1.000.000/tahun (opsional)' },
-              { icon: '💻', text: 'Pindah perangkat baru: Rp 200.000 (transfer Machine ID)' },
+              { icon: '💻', text: 'Pindah perangkat baru: Rp 300.000 (transfer Machine ID)' },
               { icon: '🏢', text: 'Setup on-site: hubungi kami untuk info biaya kunjungan' },
             ].map(item => (
               <div key={item.text} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
