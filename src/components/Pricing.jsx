@@ -31,6 +31,8 @@ const plans = [
     badgeVariant: 'gold',
     featured: true,
     features: [
+      'Kasir & manager tidak terbatas — berapapun akun',
+      'Multi-device bersamaan (tablet, HP, laptop di WiFi yang sama)',
       'Semua fitur Essential',
       'Diskon & promosi dengan PIN approval',
       'Pelanggan, kredit & lacak piutang',
