@@ -47,18 +47,26 @@ export default function CostComparison() {
                     {row.name}
                     {row.highlight && <span style={{ marginLeft: 10, fontSize: '0.72rem', background: 'var(--purple)', color: '#fff', padding: '2px 8px', borderRadius: 999, fontWeight: 600 }}>Sekali Bayar</span>}
                   </td>
-                  {[row.y1, row.y3, row.y5].map((val, j) => (
-                    <td key={j} style={{ padding: '18px 20px', textAlign: 'right', fontWeight: row.highlight ? 800 : 500, color: row.highlight ? 'var(--purple)' : val > 5000000 ? '#DC2626' : 'var(--text-dark)', borderBottom: '1px solid var(--border-light)', fontSize: row.highlight ? '1.05rem' : '1rem' }}>
-                      {row.highlight ? (
+                  {row.highlight ? (
+                    <td colSpan={3} style={{ padding: '18px 28px', borderBottom: '1px solid var(--border-light)' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20 }}>
+                        <span style={{ fontSize: '1.9rem', fontWeight: 800, color: 'var(--purple)', letterSpacing: '-0.02em' }}>
+                          <CountUp to={row.y1 / 1000000} prefix="Rp " suffix=" jt" duration={1.6} />
+                        </span>
+                        <div style={{ width: 1, height: 36, background: 'rgba(83,74,183,0.25)', flexShrink: 0 }} />
                         <div>
-                          <CountUp to={val / 1000000} prefix="Rp " suffix=" jt" duration={1.6} />
-                          {j > 0 && <div style={{ fontSize: '0.7rem', fontWeight: 600, color: '#1D9E75', marginTop: 3 }}>✓ tidak ada biaya tambahan</div>}
+                          <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#1D9E75', letterSpacing: '0.01em' }}>✓ SEKALI BAYAR</div>
+                          <div style={{ fontSize: '0.75rem', color: 'var(--text-mid)', fontWeight: 500, marginTop: 2 }}>Berlaku selamanya — tidak pernah naik</div>
                         </div>
-                      ) : (
-                        <CountUp to={val / 1000000} prefix="Rp " suffix=" jt" duration={1.4} />
-                      )}
+                      </div>
                     </td>
-                  ))}
+                  ) : (
+                    [row.y1, row.y3, row.y5].map((val, j) => (
+                      <td key={j} style={{ padding: '18px 20px', textAlign: 'right', fontWeight: 500, color: val > 5000000 ? '#DC2626' : 'var(--text-dark)', borderBottom: '1px solid var(--border-light)' }}>
+                        <CountUp to={val / 1000000} prefix="Rp " suffix=" jt" duration={1.4} />
+                      </td>
+                    ))
+                  )}
                 </tr>
               ))}
             </tbody>
